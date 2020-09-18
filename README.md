@@ -1,6 +1,8 @@
 # swearjar
 memes to count how many times you and your friends have said a collection of colorful words
 
+courtesy of me and ralph, who worked on this with me on discord LOL
+
 to use:
 - make sure your bot is in the server
 - replace the DISCORD_TOKEN with your own bot's
