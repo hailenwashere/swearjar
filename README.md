@@ -1,5 +1,5 @@
 # swearjar
-memes to count how many times you and your friends have said a collection of colorful words
+memes to count how many times you and your friends have said a collection of colorful words in a discord server using a bot
 
 courtesy of me and ralph, who worked on this with me on discord LOL
 
