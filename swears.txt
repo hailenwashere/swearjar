@@ -1,3 +1,4 @@
 fuck
 bitch
 shit
+#add more custom swears by writing them on new lines.
