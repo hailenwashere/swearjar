@@ -17,7 +17,6 @@ async def on_ready():
 async def on_message(message):
     f = open('swears.txt','r')
     swears = f.read()
-        # swears = 'fuck\nbitch\nshit' 
     swears = swears.split('\n') 
      
     for line in swears:
