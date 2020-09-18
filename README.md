@@ -1,2 +1,7 @@
 # swearjar
 memes
+
+to use:
+- make sure your bot is in the server
+- replace the DISCORD_TOKEN with your own bot's
+- when someone texts any of the swear words in the swear.txt file, swear jar will respond with a custom message set in swearjar.py
