@@ -1,6 +1,5 @@
 # bot.py
 import os
-
 import discord
 from dotenv import load_dotenv
 
@@ -39,7 +38,6 @@ async def on_message(message):
             for j in range(len(userswear)):
                 if message.author.name == userswear[j]:
                     userindex = j
-                print(userswear[j])
     
             if userindex == -1:
                 userswear.append(message.author.name)
@@ -60,27 +58,34 @@ async def on_message(message):
 
     if message.content == '$save':
         f = open('userswear.txt', 'w')
-        
-        #for user in userswear:
-        print(userswear)
 
         f.write('\n'.join(userswear))
-        # *userswear, sep='\n'
-
 
         f.close()
 
         f = open('realswearjar.txt','w')
 
-        """for line in swearcounter:
-            for num in line:
-                f.write(str(num)+' ')
-            f.write('\n')"""
+        #serialize new word :D
 
         f.write('\n'.join([' '.join([str(num) for num in line]) for line in swearcounter]))
 
         f.close()
 
         await message.channel.send('saved!')
+
+    """
+    if message.content == f'$sworecount {arg}':
+        await message.channel.send(f'{username} did a swore {some thing} times! they owe ${something*0.01} to ei :( ')
+
+    if message.content == f'$saveword {arg}':
+        if message.author.name == 'hai.suu':
+            
+            save locally with god forsaken code
+
+            await message.channel.send(f'{swears[new index or smt]} is now a swore!')
+
+        
+    """
+
 
 client.run(TOKEN)
