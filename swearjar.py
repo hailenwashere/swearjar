@@ -1,12 +1,15 @@
 # bot.py
 import os
+
 import discord
+from discord.ext import commands
 from dotenv import load_dotenv
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
-client = discord.Client()
+#client = discord.Client()
+bot = commands.Bot(command_prefix = '$')
 
 f = open('swears.txt','r')
 swears = f.read()
@@ -24,13 +27,14 @@ for i in range(len(swearcounter)):
 
 print(userswear, swearcounter, swears)
 
-@client.event
-async def on_ready():
-    print(f'{client.user} has connected to Discord!')
+#@client.event
+#async def on_ready():
+#    print(f'{client.user} has connected to Discord!')
 
-@client.event
-async def on_message(message): 
-
+@bot.event
+async def on_message(message):
+    if (message.author.bot):
+        return
     userindex = -1
 
     for i in range(len(swears)):
@@ -38,6 +42,7 @@ async def on_message(message):
             for j in range(len(userswear)):
                 if message.author.name == userswear[j]:
                     userindex = j
+                #print(userswear[j])
     
             if userindex == -1:
                 userswear.append(message.author.name)
@@ -46,46 +51,78 @@ async def on_message(message):
 
             (swearcounter[userindex])[i] += 1
 
-            print(message.content.find(swears[i]))
+            #print(message.content.find(swears[i]))
 
-            print(f'{message.author.name} said the {swears[i]} word!')
+            #print(f'{message.author.name} said the {swears[i]} word!')
 
-            print(f'{userswear[userindex]} {(swearcounter[userindex])[i]}')
+            #print(f'{userswear[userindex]} {(swearcounter[userindex])[i]}')
 
             await message.channel.send(
-                f'@{message.author} said the {swears[i][0]} word! you\'ve said the {swears[i][0]} word {(swearcounter[userindex])[i]} time(s)! **no swearing or steven will eat u**'
+                f'{message.author.nick} said the {swears[i][0]} word! you\'ve said the {swears[i][0]} word {(swearcounter[userindex])[i]} time(s)! **no swearing or steven will eat u**'
             )
 
-    if message.content == '$save':
-        f = open('userswear.txt', 'w')
+    await bot.process_commands(message)
 
-        f.write('\n'.join(userswear))
+@bot.command(name = 'save')
+async def save(ctx):
+    f = open('userswear.txt', 'w')
+    
+    #for user in userswear:
+    #print(userswear)
 
-        f.close()
+    f.write('\n'.join(userswear))
+    # *userswear, sep='\n'
 
-        f = open('realswearjar.txt','w')
 
-        #serialize new word :D
+    f.close()
 
-        f.write('\n'.join([' '.join([str(num) for num in line]) for line in swearcounter]))
+    f = open('realswearjar.txt','w')
+    f.write('\n'.join([' '.join([str(num) for num in line]) for line in swearcounter]))
+    f.close()
 
-        f.close()
+    f = open('swears.txt', 'w')
+    f.write('\n'.join(swears))
+    f.close()
 
-        await message.channel.send('saved!')
+    await ctx.send('saved!')
 
-    """
-    if message.content == f'$sworecount {arg}':
-        await message.channel.send(f'{username} did a swore {some thing} times! they owe ${something*0.01} to ei :( ')
+@bot.command(name = 'register')
+@commands.is_owner()
+async def register(ctx, swear):
+    for s in swears:
+        if (s == swear):
+            await ctx.send(f'{swear} is already a swear word dumbass')
+            return
+    swears.append(swear)
+    for arr in swearcounter:
+        arr.append(0)
 
-    if message.content == f'$saveword {arg}':
-        if message.author.name == 'hai.suu':
-            
-            save locally with god forsaken code
+    await ctx.send(f'{swear} registered. **steven is watching**')
 
-            await message.channel.send(f'{swears[new index or smt]} is now a swore!')
+@bot.command(name = 'stats')
+async def stats(ctx, member: discord.Member, arg):
+    userindex = -1
+    for i in range(len(userswear)):
+        if (userswear[i] == member.name):
+            userindex = i
+            break
+    if (userindex == -1):
+        await ctx.send(f'{member.nick} has not sworn. they will not suffer the wrath of steven')
+        return
 
+    if (arg == 'all'):
+        pass
+    else:
+        swearindex = -1
+        for i in range(len(swears)):
+            if (swears[i] == arg):
+                swearindex = i
+                break
+        if (swearindex == -1):
+            await ctx.send(f'{arg} is not a swear word')
+            return
+
+        await ctx.send(f'{member.nick} has said the {arg[0]} word {swearcounter[userindex][swearindex]} time(s)')
         
-    """
-
-
-client.run(TOKEN)
+bot.run(TOKEN)
+#client.run(TOKEN)
