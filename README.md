@@ -9,6 +9,3 @@ to use:
 - type in swear words you want to count on each line in swear.txt
 - when someone texts any of the swear words in the swear.txt file, swear jar will respond with a custom message set in swearjar.py
 - the number of swears said by users is local, but using $save can upload to txt files "realswearjar.txt" and "userswear"
-
-currently working on:
-- commands to retrieve information about how many swears someone has said
